@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36310.24 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.ContaCorrente.API", "BankMore.ContaCorrente.API\BankMore.ContaCorrente.API.csproj", "{7DD4F980-EBE5-4BE6-8794-AFF540FA71BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.ContaCorrente.Domain", "BankMore.ContaCorrente.Domain\BankMore.ContaCorrente.Domain.csproj", "{8125D32F-DA61-4FE2-991E-5629EBD7CD93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.ContaCorrente.Application", "BankMore.ContaCorrente.Application\BankMore.ContaCorrente.Application.csproj", "{02069BF2-E589-442B-B31F-25C62677AF82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.ContaCorrente.Infrastructure", "BankMore.ContaCorrente.Infrastructure\BankMore.ContaCorrente.Infrastructure.csproj", "{61D20FCE-B84F-4147-AC57-9EA5F84329CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		scripts-transferencia.sql = scripts-transferencia.sql
+		scripts.sql = scripts.sql
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.Transferencia.API", "BankMore.Transferencia.API\BankMore.Transferencia.API.csproj", "{82E1EEC2-1FE3-4A39-BBFD-AD03414B3657}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.Transferencia.Application", "BankMore.Transferencia.Application\BankMore.Transferencia.Application.csproj", "{5BFCB3B8-FA6C-43CA-8541-6E852D520863}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.Transferencia.Domain", "BankMore.Transferencia.Domain\BankMore.Transferencia.Domain.csproj", "{196FD44C-0367-4B30-9DB0-72CDEC076A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankMore.Transferencia.Infrastructure", "BankMore.Transferencia.Infrastructure\BankMore.Transferencia.Infrastructure.csproj", "{AE02EFBA-0823-46DF-919E-64B8C764B620}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DD4F980-EBE5-4BE6-8794-AFF540FA71BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD4F980-EBE5-4BE6-8794-AFF540FA71BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD4F980-EBE5-4BE6-8794-AFF540FA71BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD4F980-EBE5-4BE6-8794-AFF540FA71BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8125D32F-DA61-4FE2-991E-5629EBD7CD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8125D32F-DA61-4FE2-991E-5629EBD7CD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8125D32F-DA61-4FE2-991E-5629EBD7CD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8125D32F-DA61-4FE2-991E-5629EBD7CD93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02069BF2-E589-442B-B31F-25C62677AF82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02069BF2-E589-442B-B31F-25C62677AF82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02069BF2-E589-442B-B31F-25C62677AF82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02069BF2-E589-442B-B31F-25C62677AF82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61D20FCE-B84F-4147-AC57-9EA5F84329CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D20FCE-B84F-4147-AC57-9EA5F84329CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D20FCE-B84F-4147-AC57-9EA5F84329CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D20FCE-B84F-4147-AC57-9EA5F84329CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E1EEC2-1FE3-4A39-BBFD-AD03414B3657}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E1EEC2-1FE3-4A39-BBFD-AD03414B3657}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E1EEC2-1FE3-4A39-BBFD-AD03414B3657}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E1EEC2-1FE3-4A39-BBFD-AD03414B3657}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BFCB3B8-FA6C-43CA-8541-6E852D520863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BFCB3B8-FA6C-43CA-8541-6E852D520863}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BFCB3B8-FA6C-43CA-8541-6E852D520863}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BFCB3B8-FA6C-43CA-8541-6E852D520863}.Release|Any CPU.Build.0 = Release|Any CPU
+		{196FD44C-0367-4B30-9DB0-72CDEC076A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{196FD44C-0367-4B30-9DB0-72CDEC076A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{196FD44C-0367-4B30-9DB0-72CDEC076A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{196FD44C-0367-4B30-9DB0-72CDEC076A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE02EFBA-0823-46DF-919E-64B8C764B620}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE02EFBA-0823-46DF-919E-64B8C764B620}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE02EFBA-0823-46DF-919E-64B8C764B620}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE02EFBA-0823-46DF-919E-64B8C764B620}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8FB7E1D-BF29-4050-A867-6EF3A4D368FC}
+	EndGlobalSection
+EndGlobal
