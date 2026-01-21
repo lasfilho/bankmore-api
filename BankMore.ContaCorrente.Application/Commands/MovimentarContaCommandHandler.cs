@@ -30,10 +30,6 @@ public sealed class MovimentarContaCommandHandler
         if (string.IsNullOrWhiteSpace(numeroContaLogada))
             throw new BusinessException("Conta do token inválida.", "INVALID_ACCOUNT");
 
-        // Idempotência
-        if (await _repository.MovimentoJaProcessadoAsync(command.RequestId))
-            return;
-
         if (command.Valor <= 0)
             throw new BusinessException("Apenas valores positivos podem ser recebidos.", "INVALID_VALUE");
 
@@ -44,6 +40,10 @@ public sealed class MovimentarContaCommandHandler
         var numeroContaAlvo = string.IsNullOrWhiteSpace(command.NumeroConta)
             ? numeroContaLogada
             : command.NumeroConta.Trim();
+
+        // Idempotência por (RequestId + Conta)  
+        if (await _repository.MovimentoJaProcessadoAsync(command.RequestId, numeroContaAlvo))
+            return;
 
         // Conta diferente da logada => apenas crédito
         if (!string.Equals(numeroContaAlvo, numeroContaLogada, StringComparison.OrdinalIgnoreCase) && tipo != "C")

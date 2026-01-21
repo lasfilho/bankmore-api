@@ -16,6 +16,24 @@ namespace BankMore.ContaCorrente.Domain.Entities
         public bool Ativo { get; private set; }
         public DateTime DataCriacao { get; private set; }
 
+        public ContaCorrente(Guid id,
+                                string numeroConta,
+                                string nomeTitular,
+                                string cpf,
+                                string senhaHash,
+                                bool ativo,
+                                DateTime dataCriacao)
+        {
+            Id = id;
+            NumeroConta = numeroConta;
+            NomeTitular = nomeTitular;
+            Cpf = cpf;
+            SenhaHash = senhaHash;
+            Ativo = ativo;
+            DataCriacao = dataCriacao;
+        }
+
+
         protected ContaCorrente() { } // Necessário para ORM
 
         public ContaCorrente(string nomeTitular, string cpf, string senhaHash)

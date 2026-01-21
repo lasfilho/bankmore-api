@@ -25,6 +25,8 @@ builder.Services.AddAuthentication("Bearer")
 
 builder.Services.AddAuthorization();
 
+SQLitePCL.Batteries.Init();
+
 var app = builder.Build();
 
 // Inicializa o banco

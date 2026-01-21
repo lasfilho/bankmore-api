@@ -2,8 +2,11 @@
 
 public sealed class BusinessException : Exception
 {
-    public string Type { get; }
+    public string TipoFalha { get; }
 
-    public BusinessException(string message, string type) : base(message)
-        => Type = type;
+    public BusinessException(string mensagem, string tipoFalha)
+        : base(mensagem)
+    {
+        TipoFalha = tipoFalha;
+    }
 }

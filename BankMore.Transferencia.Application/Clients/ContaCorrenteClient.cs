@@ -1,8 +1,5 @@
-﻿using BankMore.Transferencia.Application.DTOs;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
+﻿using System.Net.Http.Json;
+using BankMore.Transferencia.Application.DTOs;
 
 namespace BankMore.Transferencia.Application.Clients;
 
@@ -12,14 +9,16 @@ public sealed class ContaCorrenteClient
 
     public ContaCorrenteClient(HttpClient http) => _http = http;
 
-    public async Task<HttpResponseMessage> MovimentarAsync(MovimentarContaRequest req, string bearerToken, CancellationToken ct)
+    public Task<HttpResponseMessage> MovimentarAsync(MovimentarContaRequest request, string token, CancellationToken ct)
     {
-        var json = JsonSerializer.Serialize(req);
-        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/api/contas/movimentos")
+        {
+            Content = JsonContent.Create(request)
+        };
 
-        _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+        httpRequest.Headers.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-        // Seu endpoint atual: POST /api/contas/movimentos
-        return await _http.PostAsync("/api/contas/movimentos", content, ct);
+        return _http.SendAsync(httpRequest, ct);
     }
 }

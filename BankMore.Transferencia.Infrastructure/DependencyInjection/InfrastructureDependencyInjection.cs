@@ -15,7 +15,7 @@ namespace BankMore.Transferencia.Infrastructure.DependencyInjection
             services.AddSingleton<DbConnectionFactory>();
             services.AddScoped<ITransferenciaRepository, TransferenciaRepository>();
 
-            services.AddSingleton<DatabaseInitializer>(); // opcional, se você for inicializar DB no startup
+            services.AddSingleton<DatabaseInitializer>();
 
             return services;
         }

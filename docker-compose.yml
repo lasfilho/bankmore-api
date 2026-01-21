@@ -1,0 +1,35 @@
+services:
+  contacorrente-api:
+    build:
+      context: .
+      dockerfile: BankMore.ContaCorrente.API/Dockerfile
+    container_name: contacorrente-api
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    volumes:
+      - contacorrente_data:/app/data
+    working_dir: /app
+    # opcional: se você quiser que o SQLite fique em /app/data:
+    # então ajuste a ConnectionString para "Data Source=/app/data/bankmore.db"
+
+  transferencia-api:
+    build:
+      context: .
+      dockerfile: BankMore.Transferencia.API/Dockerfile
+    container_name: transferencia-api
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    depends_on:
+      - contacorrente-api
+    volumes:
+      - transferencia_data:/app/data
+    working_dir: /app
+    # idem: se quiser /app/data/transferencia.db, ajuste connectionstring
+
+volumes:
+  contacorrente_data:
+  transferencia_data:

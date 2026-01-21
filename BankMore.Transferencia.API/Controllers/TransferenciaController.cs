@@ -1,12 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BankMore.Transferencia.Application.Commands;
+using BankMore.Transferencia.Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BankMore.Transferencia.API.Controllers
+namespace BankMore.Transferencia.API.Controllers;
+
+[ApiController]
+[Route("api/transferencias")]
+public sealed class TransferenciaController : ControllerBase
 {
-    public class TransferenciaController : Controller
+    [Authorize]
+    [HttpPost]
+    public async Task<IActionResult> Efetuar(
+        [FromBody] EfetuarTransferenciaCommand command,
+        [FromServices] EfetuarTransferenciaCommandHandler handler,
+        CancellationToken ct)
     {
-        public IActionResult Index()
+        try
         {
-            return View();
+            await handler.Handle(command, ct);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            // regra: 403 quando token inválido/expirado
+            return StatusCode(StatusCodes.Status403Forbidden, new
+            {
+                TipoFalha = "USER_UNAUTHORIZED",
+                Mensagem = ex.Message
+            });
+        }
+        catch (BusinessException ex)
+        {
+            // regra: 400 quando dados inconsistentes / falha em alguma requisição
+            return BadRequest(new
+            {
+                TipoFalha = ex.TipoFalha,
+                Mensagem = ex.Message
+            });
         }
     }
 }

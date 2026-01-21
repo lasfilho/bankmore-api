@@ -2,6 +2,7 @@
 using BankMore.ContaCorrente.Domain.Interfaces;
 using BankMore.ContaCorrente.Infrastructure.Persistence;
 using Dapper;
+using System.Globalization;
 
 namespace BankMore.ContaCorrente.Infrastructure.Repositories
 {
@@ -14,16 +15,48 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
             _connectionFactory = connectionFactory;
         }
 
+        private sealed record ContaCorrenteRow(
+            string Id,
+            string NumeroConta,
+            string NomeTitular,
+            string Cpf,
+            string SenhaHash,
+            long Ativo,
+            string DataCriacao
+        );
+
+        private static ContaCorrenteEntity Map(ContaCorrenteRow row)
+        {
+            return new ContaCorrenteEntity(
+                id: Guid.Parse(row.Id),
+                numeroConta: row.NumeroConta,
+                nomeTitular: row.NomeTitular,
+                cpf: row.Cpf,
+                senhaHash: row.SenhaHash,
+                ativo: row.Ativo == 1,
+                dataCriacao: DateTime.Parse(row.DataCriacao, null, DateTimeStyles.RoundtripKind)
+            );
+        }
+
         public async Task<ContaCorrenteEntity?> ObterPorCpfAsync(string cpf)
         {
             using var conn = _connectionFactory.CreateConnection();
 
             const string sql = """
-                SELECT * FROM CONTACORRENTE
+                SELECT
+                    ID           AS Id,
+                    NUMERO_CONTA AS NumeroConta,
+                    NOME_TITULAR AS NomeTitular,
+                    CPF          AS Cpf,
+                    SENHA_HASH   AS SenhaHash,
+                    ATIVO        AS Ativo,
+                    DATA_CRIACAO AS DataCriacao
+                FROM CONTACORRENTE
                 WHERE CPF = @cpf
             """;
 
-            return await conn.QueryFirstOrDefaultAsync<ContaCorrenteEntity>(sql, new { cpf });
+            var row = await conn.QueryFirstOrDefaultAsync<ContaCorrenteRow>(sql, new { cpf });
+            return row is null ? null : Map(row);
         }
 
         public async Task<ContaCorrenteEntity?> ObterPorNumeroAsync(string numeroConta)
@@ -31,11 +64,20 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
             using var conn = _connectionFactory.CreateConnection();
 
             const string sql = """
-                SELECT * FROM CONTACORRENTE
+                SELECT
+                    ID           AS Id,
+                    NUMERO_CONTA AS NumeroConta,
+                    NOME_TITULAR AS NomeTitular,
+                    CPF          AS Cpf,
+                    SENHA_HASH   AS SenhaHash,
+                    ATIVO        AS Ativo,
+                    DATA_CRIACAO AS DataCriacao
+                FROM CONTACORRENTE
                 WHERE NUMERO_CONTA = @numeroConta
             """;
 
-            return await conn.QueryFirstOrDefaultAsync<ContaCorrenteEntity>(sql, new { numeroConta });
+            var row = await conn.QueryFirstOrDefaultAsync<ContaCorrenteRow>(sql, new { numeroConta });
+            return row is null ? null : Map(row);
         }
 
         public async Task AdicionarAsync(ContaCorrenteEntity conta)
@@ -49,7 +91,16 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
                 (@Id, @NumeroConta, @NomeTitular, @Cpf, @SenhaHash, @Ativo, @DataCriacao)
             """;
 
-            await conn.ExecuteAsync(sql, conta);
+            await conn.ExecuteAsync(sql, new
+            {
+                Id = conta.Id.ToString(),
+                conta.NumeroConta,
+                conta.NomeTitular,
+                conta.Cpf,
+                conta.SenhaHash,
+                Ativo = conta.Ativo ? 1 : 0,
+                DataCriacao = conta.DataCriacao.ToString("O")
+            });
         }
 
         public async Task AtualizarAsync(ContaCorrenteEntity conta)
@@ -62,24 +113,35 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
                 WHERE ID = @Id
             """;
 
-            await conn.ExecuteAsync(sql, conta);
+            await conn.ExecuteAsync(sql, new
+            {
+                Id = conta.Id.ToString(),
+                Ativo = conta.Ativo ? 1 : 0
+            });
         }
 
         // ---------------- MOVIMENTAÇÃO ----------------
 
-        public async Task<bool> MovimentoJaProcessadoAsync(Guid requestId)
+        public async Task<bool> MovimentoJaProcessadoAsync(Guid requestId, string numeroConta)
         {
             using var conn = _connectionFactory.CreateConnection();
 
             const string sql = """
-                SELECT 1 FROM MOVIMENTO
-                WHERE REQUEST_ID = @requestId
-                LIMIT 1
-            """;
+                                    SELECT 1 FROM MOVIMENTO
+                                    WHERE REQUEST_ID = @requestId
+                                      AND NUMERO_CONTA = @numeroConta
+                                    LIMIT 1
+                                """;
 
-            var result = await conn.ExecuteScalarAsync<int?>(sql, new { requestId = requestId.ToString() });
+            var result = await conn.ExecuteScalarAsync<int?>(sql, new
+            {
+                requestId = requestId.ToString(),
+                numeroConta
+            });
+
             return result.HasValue;
         }
+
 
         public async Task RegistrarMovimentoAsync(
             Guid requestId,
@@ -103,7 +165,7 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
                 numeroConta,
                 valor,
                 tipo,
-                dataHora
+                dataHora = dataHora.ToString("O")
             });
         }
 
@@ -127,14 +189,18 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
             using var conn = _connectionFactory.CreateConnection();
 
             const string sql = """
-                                    SELECT 1 FROM CONTACORRENTE
-                                    WHERE NUMERO_CONTA = @numeroConta
-                                    LIMIT 1
-                               """;
+                SELECT 1 FROM CONTACORRENTE
+                WHERE NUMERO_CONTA = @numeroConta
+                LIMIT 1
+            """;
 
             var result = await conn.ExecuteScalarAsync<int?>(sql, new { numeroConta });
             return result.HasValue;
         }
 
+        public Task<bool> MovimentoJaProcessadoAsync(Guid requestId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

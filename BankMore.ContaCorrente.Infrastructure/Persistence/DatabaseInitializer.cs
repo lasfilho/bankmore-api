@@ -17,25 +17,47 @@ public sealed class DatabaseInitializer
 
     public async Task InitializeAsync()
     {
-        // Caminho relativo: raiz da aplicação (bin) -> volta pra raiz da solution
-        // Estrutura esperada:
-        // <solution>/Database/scripts.sql
+        // =====================================================
+        // 1️⃣ PRIMEIRO: tenta o caminho direto no container
+        // /app/Database/scripts.sql
+        // =====================================================
+        var directPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Database",
+            "scripts.sql"
+        );
+
+        if (File.Exists(directPath))
+        {
+            var sql = await File.ReadAllTextAsync(directPath);
+
+            using var conn = _connectionFactory.CreateConnection();
+            await conn.ExecuteAsync(sql);
+
+            return;
+        }
+
+        // =====================================================
+        // 2️⃣ FALLBACK: sobe diretórios (execução local / VS)
+        // =====================================================
         var baseDir = AppContext.BaseDirectory;
 
-        // Sobe pastas até achar "Database/scripts.sql"
-        // (funciona bem rodando via Visual Studio e em container, desde que você copie o arquivo)
-        var scriptPath = FindUpwards(baseDir, Path.Combine("Database", "scripts.sql"));
+        var scriptPath = FindUpwards(
+            baseDir,
+            Path.Combine("Database", "scripts.sql")
+        );
 
         if (scriptPath is null)
-            throw new FileNotFoundException("Não foi possível localizar Database/scripts.sql a partir de " + baseDir);
+            throw new FileNotFoundException(
+                "Não foi possível localizar Database/scripts.sql"
+            );
 
-        var sql = await File.ReadAllTextAsync(scriptPath);
+        var sqlFallback = await File.ReadAllTextAsync(scriptPath);
 
-        using var conn = _connectionFactory.CreateConnection();
-        await conn.ExecuteAsync(sql);
-
-        _logger.LogInformation("Banco inicializado com script: {ScriptPath}", scriptPath);
+        using var connFallback = _connectionFactory.CreateConnection();
+        await connFallback.ExecuteAsync(sqlFallback);
     }
+
 
     private static string? FindUpwards(string startDir, string relativeTarget)
     {
