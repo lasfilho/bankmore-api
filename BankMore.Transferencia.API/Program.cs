@@ -10,6 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+});
+
 builder.Services.AddScoped<EfetuarTransferenciaCommandHandler>();
 
 builder.Services.AddHttpClient<ContaCorrenteClient>(client =>
@@ -33,7 +39,6 @@ builder.Services.AddAuthorization();
 
 SQLitePCL.Batteries.Init();
 
-
 var app = builder.Build();
 
 // Inicializa o banco (Transferência)
@@ -42,6 +47,9 @@ using (var scope = app.Services.CreateScope())
     var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
     await initializer.InitializeAsync();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
