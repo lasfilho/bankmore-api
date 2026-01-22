@@ -91,11 +91,12 @@ public sealed class EfetuarTransferenciaCommandHandler
 
         // 2) Crédito na conta destino (enviar NumeroConta)
         var reqCredito = new MovimentarContaRequest(
-            RequestId: command.RequestId,
+            RequestId: Guid.NewGuid(),           // ✅ diferente do débito
             NumeroConta: contaDestino,
             Valor: command.Valor,
             Tipo: "C"
         );
+
 
         var creditoResp = await _contaClient.MovimentarAsync(reqCredito, token, ct);
 

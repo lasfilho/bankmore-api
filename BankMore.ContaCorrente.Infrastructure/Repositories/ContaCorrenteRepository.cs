@@ -153,7 +153,7 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
             using var conn = _connectionFactory.CreateConnection();
 
             const string sql = """
-                INSERT INTO MOVIMENTO
+                INSERT OR IGNORE INTO MOVIMENTO
                 (REQUEST_ID, NUMERO_CONTA, VALOR, TIPO, DATA_HORA)
                 VALUES
                 (@requestId, @numeroConta, @valor, @tipo, @dataHora)

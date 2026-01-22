@@ -27,6 +27,8 @@ public sealed class MovimentarContaCommandHandler
 
         var numeroContaLogada = user.FindFirst(JwtClaims.NumeroConta)?.Value;
 
+
+
         if (string.IsNullOrWhiteSpace(numeroContaLogada))
             throw new BusinessException("Conta do token inválida.", "INVALID_ACCOUNT");
 
@@ -34,12 +36,16 @@ public sealed class MovimentarContaCommandHandler
             throw new BusinessException("Apenas valores positivos podem ser recebidos.", "INVALID_VALUE");
 
         var tipo = (command.Tipo ?? "").Trim().ToUpperInvariant();
+
         if (tipo is not ("C" or "D"))
             throw new BusinessException("Apenas os tipos 'C' (Crédito) ou 'D' (Débito) podem ser aceitos.", "INVALID_TYPE");
 
         var numeroContaAlvo = string.IsNullOrWhiteSpace(command.NumeroConta)
             ? numeroContaLogada
             : command.NumeroConta.Trim();
+
+        Console.WriteLine($"[MOV] tokenConta={numeroContaLogada} cmd.NumeroConta={command.NumeroConta} tipo={tipo} valor={command.Valor} requestId={command.RequestId}");
+        Console.WriteLine($"[MOV] numeroContaAlvo={numeroContaAlvo}");
 
         // Idempotência por (RequestId + Conta)  
         if (await _repository.MovimentoJaProcessadoAsync(command.RequestId, numeroContaAlvo))
