@@ -198,9 +198,5 @@ namespace BankMore.ContaCorrente.Infrastructure.Repositories
             return result.HasValue;
         }
 
-        public Task<bool> MovimentoJaProcessadoAsync(Guid requestId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

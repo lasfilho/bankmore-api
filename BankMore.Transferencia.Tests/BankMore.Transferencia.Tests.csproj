@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<VSTestUseMSBuildOutput>true</VSTestUseMSBuildOutput>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.2" />
+		<PackageReference Include="FluentAssertions" Version="8.8.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.23" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="xunit" Version="2.9.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BankMore.ContaCorrente.API\BankMore.ContaCorrente.API.csproj"
+						  Aliases="global,ContaApi" />
+
+		<ProjectReference Include="..\BankMore.Transferencia.API\BankMore.Transferencia.API.csproj"
+						  Aliases="global,TransfApi" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="xunit.runner.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDependencyFile>true</GenerateDependencyFile>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+	</PropertyGroup>
+
+	<Target Name="CreateTesthostDepsJson" AfterTargets="Build">
+		<!-- Cria o testhost.deps.json a partir do deps do próprio projeto de teste -->
+		<ItemGroup>
+			<_Deps Include="$(OutputPath)$(AssemblyName).deps.json" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(_Deps)" DestinationFiles="$(OutputPath)testhost.deps.json" SkipUnchangedFiles="true" Condition="Exists('%(_Deps.Identity)')" />
+	</Target>
+
+</Project>

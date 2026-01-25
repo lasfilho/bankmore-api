@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<VSTestUseMSBuildOutput>true</VSTestUseMSBuildOutput>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\BankMore.ContaCorrente.API\BankMore.ContaCorrente.API.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.2" />
+		<PackageReference Include="FluentAssertions" Version="8.8.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.23" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="xunit" Version="2.9.2" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Update="xunit.runner.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDependencyFile>true</GenerateDependencyFile>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+	</PropertyGroup>
+
+	<Target Name="CreateTesthostDepsJson" AfterTargets="Build">
+		<!-- garante que a API foi buildada antes -->
+		<MSBuild Projects="..\BankMore.ContaCorrente.API\BankMore.ContaCorrente.API.csproj"
+				 Targets="Build"
+				 Properties="Configuration=$(Configuration)" />
+
+		<PropertyGroup>
+			<_ApiDeps>..\BankMore.ContaCorrente.API\bin\$(Configuration)\net8.0\BankMore.ContaCorrente.API.deps.json</_ApiDeps>
+		</PropertyGroup>
+
+		<Copy
+		  SourceFiles="$(_ApiDeps)"
+		  DestinationFiles="$(TargetDir)testhost.deps.json"
+		  SkipUnchangedFiles="true"
+		  Condition="Exists('$(_ApiDeps)')" />
+	</Target>
+</Project>
