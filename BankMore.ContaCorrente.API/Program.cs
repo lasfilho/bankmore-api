@@ -4,7 +4,9 @@ using BankMore.ContaCorrente.Application.DependencyInjection;
 using BankMore.ContaCorrente.Infrastructure.DependencyInjection;
 using BankMore.ContaCorrente.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using System.Text.Json;
+
 
 
 
@@ -18,7 +20,30 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.EnableAnnotations(); 
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Cole aqui: Bearer {seu_token}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            System.Array.Empty<string>()
+        }
+    });
 });
 
 
@@ -46,7 +71,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 var payload = JsonSerializer.Serialize(new
                 {
-                    message = "Token inválido ou expirado.",
+                    message = "Token invï¿½lido ou expirado.",
                     type = "USER_UNAUTHORIZED"
                 });
 
@@ -60,7 +85,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
                 var payload = JsonSerializer.Serialize(new
                 {
-                    message = "Token inválido ou expirado.",
+                    message = "Token invï¿½lido ou expirado.",
                     type = "USER_UNAUTHORIZED"
                 });
 

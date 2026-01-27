@@ -12,20 +12,29 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
+      "launchBrowser": true,
       "applicationUrl": "http://localhost:5042",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
-    }
-  },
-    "IIS Express": {
-      "commandName": "IISExpress",
+    },
+    "BankMore.ContaCorrente.API": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+  },
+  "IIS Express": {
+    "commandName": "IISExpress",
+    "launchBrowser": true,
+    "launchUrl": "weatherforecast",
+    "environmentVariables": {
+      "ASPNETCORE_ENVIRONMENT": "Development"
     }
   }
 }
